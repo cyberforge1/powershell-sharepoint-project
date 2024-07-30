@@ -1,12 +1,11 @@
+
 # script-two-create-site.ps1
 
-# Ensure you are running PowerShell 7
 if ($PSVersionTable.PSVersion.Major -lt 7) {
     Write-Host "Please run this script with PowerShell 7 or later." -ForegroundColor Red
     exit 1
 }
 
-# Load environment variables from .env file
 $envFilePath = ".\.env"
 if (Test-Path $envFilePath) {
     $envFileContent = Get-Content $envFilePath -ErrorAction Stop
@@ -20,13 +19,14 @@ if (Test-Path $envFilePath) {
     exit 1
 }
 
-# Variables
-$siteName = "FirstTestSite"
-$siteAlias = "FirstTestSite"
+$siteName = $env:NEW_SITE_NAME
+$siteAlias = $env:SITE_ALIAS
 $siteUrl = $env:SHAREPOINT_SITE_URL
 $owner = $env:OWNER_EMAIL
 
-# Install necessary modules if they are not already installed
+Write-Host "siteUrl: $siteUrl"
+Write-Host "owner: $owner"
+
 $modules = @('PnP.PowerShell')
 foreach ($module in $modules) {
     if (-not (Get-Module -ListAvailable -Name $module)) {
@@ -34,18 +34,14 @@ foreach ($module in $modules) {
     }
 }
 
-# Import modules
 Import-Module PnP.PowerShell
 
-# Retrieve credentials from environment variables
 $adminUsername = $env:SHAREPOINT_USERNAME
 $adminPassword = $env:SHAREPOINT_PASSWORD | ConvertTo-SecureString -AsPlainText -Force
 $adminCredentials = [pscredential]::new($adminUsername, $adminPassword)
 
-# Connect to SharePoint Online
 Connect-PnPOnline -Url $siteUrl -Credentials $adminCredentials -WarningAction Ignore
 
-# Check if the site alias already exists
 try {
     $existingSite = Get-PnPTenantSite -Detailed | Where-Object { $_.Url -eq "$siteUrl/sites/$siteAlias" }
     if ($null -ne $existingSite) {
@@ -58,7 +54,6 @@ catch {
     exit 1
 }
 
-# Create a New Site
 try {
     New-PnPSite -Type TeamSite -Title $siteName -Alias $siteAlias -IsPublic -Owner $owner
     Write-Host "Created site $siteUrl/sites/$siteAlias"
