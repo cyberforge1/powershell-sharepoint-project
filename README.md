@@ -58,6 +58,9 @@ function Invoke-Template {
     }
 }
 
+```
+
+```powershell
 function New-Sites {
     param (
         [int]$siteCount,
@@ -87,14 +90,11 @@ function New-Sites {
 New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $env:TEMPLATE_PATH
 ```
 
-## MVP
-1) Fork https://github.com/SharePoint/sp-dev-provisioning-templates
-2) Create a new site and apply template (https://github.com/SharePoint/sp-dev-provisioning-templates/tree/master/tenant/contosoworks) to it. This can be on dev tenant vbtnd.onmicrosoft.com or your own. Provide link as response
-3) Modify template to include the new years for Global Country Holiday, include ANZ public holidays.
-4) Capture the site and push to forked RP with PR and merge
-5) Create script to apply this template to 10000 sites. Remember title, description and URL will be different for each of these sites.
+## Notes
+
 6) Explain your approach for applying this template on demand via Azure
 7) Explain Your approach for integrating a solution in step 6 into other systems
+
 
 ## Structure
 - The script `Connect-SharePoint.ps1` handles connecting to SharePoint Online using stored credentials.
