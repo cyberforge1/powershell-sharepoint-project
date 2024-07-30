@@ -26,6 +26,51 @@ $securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -
 # Create PSCredential object
 $cred = New-Object System.Management.Automation.PSCredential ($env:SHAREPOINT_USERNAME, $securePassword)
 
+# Function to validate DateTime fields in the template
+function Test-DateTimeFields {
+    param (
+        [string]$templatePath
+    )
+    
+    [xml]$xmlTemplate = Get-Content -Path $templatePath
+    
+    foreach ($field in $xmlTemplate.SelectNodes("//Field[@Type='DateTime']")) {
+        $dateTimeValue = $field.InnerText.Trim()
+        if ($dateTimeValue) {
+            try {
+                [datetime]::Parse($dateTimeValue) | Out-Null
+            } catch {
+                Write-Error "Invalid DateTime format: $dateTimeValue in field $($field.Name)"
+            }
+        } else {
+            Write-Error "Empty DateTime field found: $($field.Name)"
+        }
+    }
+}
+
+# Function to apply template
+function Invoke-Template {
+    param (
+        [string]$siteUrl,
+        [string]$templatePath
+    )
+    
+    # Validate DateTime fields before applying the template
+    Test-DateTimeFields -templatePath $templatePath
+    
+    try {
+        Connect-PnPOnline -Url $siteUrl -Credentials $cred
+        Write-Host "Applying template to site: $siteUrl"
+        Invoke-PnPSiteTemplate -Path $templatePath
+        Write-Host "Template applied to site: $siteUrl"
+    } catch {
+        Write-Error "Error applying template to site ${siteUrl}: $_"
+        if ($_.Exception -match "String '(.*)' was not recognized as a valid DateTime") {
+            Write-Host "Invalid DateTime format found: $($matches[1])"
+        }
+    }
+}
+
 # Function to create sites
 function New-Sites {
     param (
@@ -50,23 +95,6 @@ function New-Sites {
         } catch {
             Write-Error "Error creating site ${siteTitle}: $_"
         }
-    }
-}
-
-# Function to apply template
-function Invoke-Template {
-    param (
-        [string]$siteUrl,
-        [string]$templatePath
-    )
-    
-    try {
-        Connect-PnPOnline -Url $siteUrl -Credentials $cred
-        Write-Host "Applying template to site: $siteUrl"
-        Invoke-PnPSiteTemplate -Path $templatePath
-        Write-Host "Template applied to site: $siteUrl"
-    } catch {
-        Write-Error "Error applying template to site ${siteUrl}: $_"
     }
 }
 
