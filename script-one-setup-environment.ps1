@@ -1,4 +1,4 @@
-# Filename: setup-environment.ps1
+# script-one-setup-environment.ps1
 
 # Load environment variables from .env file
 Import-Module PSDotEnv
@@ -19,9 +19,14 @@ Install-Module -Name SharePointPnPPowerShellOnline -Force -AllowClobber
 # Import SharePointPnPPowerShellOnline Module
 Import-Module SharePointPnPPowerShellOnline
 
+# Retrieve credentials from environment variables
+$adminUsername = $env:SHAREPOINT_USERNAME
+$adminPassword = $env:SHAREPOINT_PASSWORD | ConvertTo-SecureString -AsPlainText -Force
+$adminCredentials = New-Object System.Management.Automation.PSCredential($adminUsername, $adminPassword)
+
 # Connect to SharePoint Online
 $adminUrl = $env:SHAREPOINT_ADMIN_URL
-Connect-PnPOnline -Url $adminUrl -Credentials (Get-Credential)
+Connect-PnPOnline -Url $adminUrl -Credentials $adminCredentials
 
 # Verify connection using a PnP cmdlet
 Get-PnPTenantSite
