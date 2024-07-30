@@ -106,14 +106,6 @@ The three services - Azure Automation, Functions and Key Vault - work cohesively
 - The script `Create-Sites.ps1` creates the sites and applies the template.
 - Adjust the `.env` file with your specific environment details.
 
-## Usage
-1. Run the `Main.ps1` script:
-    ```sh
-    pwsh .\Main.ps1
-    ```
-
-2. Enter the number of sites you want to create when prompted.
-
 ## Setup
 1. Install the required PowerShell module:
     ```sh
