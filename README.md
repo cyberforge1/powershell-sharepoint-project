@@ -94,17 +94,11 @@ New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $en
 
 ### Application of Azure Services
 
-Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Connect-SharePoint.ps1` and `Create-Sites.ps1` scripts and Functions can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.
+6) Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Connect-SharePoint.ps1` and `Create-Sites.ps1` scripts and Functions can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.
 
 ### General Application
 
-The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
-
-
-## Structure
-- The script `Connect-SharePoint.ps1` handles connecting to SharePoint Online using stored credentials.
-- The script `Create-Sites.ps1` creates the sites and applies the template.
-- Adjust the `.env` file with your specific environment details.
+7) The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
 
 ## Setup
 1. Install the required PowerShell module:
@@ -123,3 +117,8 @@ The three services - Azure Automation, Functions and Key Vault - work cohesively
     NEW_SITE_NAME=your_new_site_name
     SITE_ALIAS=your_site_alias
     ```
+
+## Structure
+- The script `Connect-SharePoint.ps1` handles connecting to SharePoint Online using stored credentials.
+- The script `Create-Sites.ps1` creates the sites and applies the template.
+- Adjust the `.env` file with your specific environment details.
