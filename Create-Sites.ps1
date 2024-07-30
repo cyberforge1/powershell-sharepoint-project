@@ -4,29 +4,23 @@ param (
     [int]$siteCount
 )
 
-# Import required modules
 Import-Module PnP.PowerShell
 
-# Read environment variables from .env file
 $envVariables = Get-Content -Path "./.env" | Where-Object { $_ -match '=' } | ForEach-Object {
     $name, $value = $_ -split '=', 2
     [PSCustomObject]@{ Name = $name.Trim(); Value = $value.Trim() }
 }
 
-# Set environment variables
 $envVariables | ForEach-Object {
     if ($_.Name -and $_.Value) {
         [Environment]::SetEnvironmentVariable($_.Name, $_.Value)
     }
 }
 
-# Convert plain text password to SecureString
 $securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -Force
 
-# Create PSCredential object
 $cred = New-Object System.Management.Automation.PSCredential ($env:SHAREPOINT_USERNAME, $securePassword)
 
-# Function to validate DateTime fields in the template
 function Test-DateTimeFields {
     param (
         [string]$templatePath
@@ -48,14 +42,12 @@ function Test-DateTimeFields {
     }
 }
 
-# Function to apply template
 function Invoke-Template {
     param (
         [string]$siteUrl,
         [string]$templatePath
     )
     
-    # Validate DateTime fields before applying the template
     Test-DateTimeFields -templatePath $templatePath
     
     try {
@@ -71,7 +63,6 @@ function Invoke-Template {
     }
 }
 
-# Function to create sites
 function New-Sites {
     param (
         [int]$siteCount,
@@ -98,7 +89,6 @@ function New-Sites {
     }
 }
 
-# Main script execution
 New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $env:TEMPLATE_PATH
 
 Write-Host "Site creation script executed successfully."
