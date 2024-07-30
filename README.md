@@ -4,11 +4,11 @@
 This project uses PowerShell scripting to automate the creation and application of templates to multiple SharePoint sites.
 
 ## Tech Stack
-- PowerShell 7
+- PowerShell 7.4.4
 - Microsoft SharePoint
 - PnP.PowerShell module
 
-## PowerShell Scripts
+## PowerShell Scripting
 
 ### Main.ps1
 
@@ -92,8 +92,13 @@ New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $en
 
 ## Notes
 
-6) Explain your approach for applying this template on demand via Azure
-7) Explain Your approach for integrating a solution in step 6 into other systems
+### Application of Azure Services
+
+Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Connect-SharePoint.ps1` and `Create-Sites.ps1` scripts and Functions can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.
+
+### General Application
+
+The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
 
 
 ## Structure
