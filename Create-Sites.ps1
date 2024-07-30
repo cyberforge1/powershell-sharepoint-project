@@ -1,3 +1,9 @@
+# Create-Sites.ps1
+
+param (
+    [int]$siteCount
+)
+
 # Import required modules
 Import-Module PnP.PowerShell
 
@@ -28,6 +34,7 @@ function New-Sites {
         [string]$templatePath
     )
     
+    Write-Host "Starting site creation process with $siteCount sites..."
     for ($i = 1; $i -le $siteCount; $i++) {
         $siteNumber = "{0:D4}" -f $i
         $siteUrl = "$env:SHAREPOINT_SITE_URL/sites/$sitePrefix$siteNumber"
@@ -64,10 +71,6 @@ function Invoke-Template {
 }
 
 # Main script execution
-param (
-    [int]$siteCount = 5
-)
-
 New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $env:TEMPLATE_PATH
 
 Write-Host "Site creation script executed successfully."
