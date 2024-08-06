@@ -6,19 +6,27 @@ param (
 
 Import-Module PnP.PowerShell
 
-$envVariables = Get-Content -Path "./.env" | Where-Object { $_ -match '=' } | ForEach-Object {
-    $name, $value = $_ -split '=', 2
-    [PSCustomObject]@{ Name = $name.Trim(); Value = $value.Trim() }
-}
+function Initialize-EnvironmentVariables {
+    $envVariables = Get-Content -Path "./.env" | Where-Object { $_ -match '=' } | ForEach-Object {
+        $name, $value = $_ -split '=', 2
+        [PSCustomObject]@{ Name = $name.Trim(); Value = $value.Trim() }
+    }
 
-$envVariables | ForEach-Object {
-    if ($_.Name -and $_.Value) {
-        [Environment]::SetEnvironmentVariable($_.Name, $_.Value)
+    $envVariables | ForEach-Object {
+        if ($_.Name -and $_.Value) {
+            [Environment]::SetEnvironmentVariable($_.Name, $_.Value)
+        }
     }
 }
 
-$securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -Force
+Initialize-EnvironmentVariables
 
+# Debug: Print environment variables
+Write-Host "SHAREPOINT_SITE_URL: $($env:SHAREPOINT_SITE_URL)"
+Write-Host "NEW_SITE_NAME: $($env:NEW_SITE_NAME)"
+Write-Host "TEMPLATE_PATH: $($env:TEMPLATE_PATH)"
+
+$securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($env:SHAREPOINT_USERNAME, $securePassword)
 
 function Test-DateTimeFields {
@@ -73,14 +81,19 @@ function New-Sites {
     Write-Host "Starting site creation process with $siteCount sites..."
     for ($i = 1; $i -le $siteCount; $i++) {
         $siteNumber = "{0:D4}" -f $i
-        $siteUrl = "$env:SHAREPOINT_SITE_URL/sites/$sitePrefix$siteNumber"
+        $siteUrl = "$($env:SHAREPOINT_SITE_URL)/sites/$($sitePrefix)$siteNumber"
         $siteTitle = "$sitePrefix $siteNumber"
         $siteDescription = "Site $sitePrefix number $siteNumber"
         
+        # Debug: Print site details
+        Write-Host "Creating site: $siteUrl with title: $siteTitle and description: $siteDescription"
+        Write-Host "SHAREPOINT_SITE_URL: $($env:SHAREPOINT_SITE_URL)"
+        Write-Host "sitePrefix: $sitePrefix"
+        Write-Host "siteNumber: $siteNumber"
+        Write-Host "siteUrl: $siteUrl"
+
         try {
-            Write-Host "Creating site: $siteUrl"
             New-PnPSite -Type CommunicationSite -Url $siteUrl -Owner $env:OWNER_EMAIL -Title $siteTitle -Description $siteDescription
-            
             Write-Host "Created site: $siteUrl"
             Invoke-Template -siteUrl $siteUrl -templatePath $templatePath
         } catch {
