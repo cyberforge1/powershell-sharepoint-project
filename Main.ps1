@@ -9,8 +9,8 @@ $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
 $TEMPLATE_PATH = ".\contosoworks\source\template.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
 $SHAREPOINT_PASSWORD = '$i2odroY8K2s'  # Enclosed in single quotes to ensure the value is correct
-$NEW_SITE_NAME = "SiteEight"
-$SITE_ALIAS = "SiteEight"
+$NEW_SITE_NAME = "SiteFifteen"
+$SITE_ALIAS = "SiteFifteen"
 $siteCount = 5  # Set the number of sites you want to create
 
 # Debugging: Print out the hardcoded variables
@@ -67,45 +67,38 @@ Write-Host "Successfully connected to SharePoint Online."
 
 # Resolve the template path to an absolute path
 $resolvedTemplatePath = Resolve-Path $TEMPLATE_PATH
+Write-Host "Resolved template path: $resolvedTemplatePath"
 
-# Function to convert DateTime format
-function Convert-DateTimeFormat {
-    param (
-        [string]$dateTimeValue
-    )
-    try {
-        $dateTime = [datetime]::ParseExact($dateTimeValue, 'MM/dd/yyyy', $null)
-        return $dateTime.ToString('dd/MM/yyyy')
-    } catch {
-        Write-Error "Error converting DateTime format: $dateTimeValue"
-        return $dateTimeValue
-    }
-}
-
-# Function to test and convert DateTime fields
-function Test-And-Convert-DateTimeFields {
+# Function to convert DateTime format within the XML template
+function Convert-DateTimeFormatInTemplate {
     param (
         [string]$templatePath
     )
-    
-    [xml]$xmlTemplate = Get-Content -Path $templatePath
-    
-    foreach ($field in $xmlTemplate.SelectNodes("//Field[@Type='DateTime']")) {
-        $dateTimeValue = $field.InnerText.Trim()
-        if ($dateTimeValue) {
+
+    # Load the XML template
+    [xml]$xmlContent = Get-Content -Path $templatePath
+
+    # Define the DateTime format pattern
+    $dateTimePattern = '(\d{1,2})/(\d{1,2})/(\d{4})\s(\d{1,2}):(\d{2})\s([APMapm]{2})'
+
+    # Iterate through each node and convert DateTime format
+    $xmlContent.SelectNodes("//*[text()]") | ForEach-Object {
+        if ($_.InnerText -match $dateTimePattern) {
+            $dateTimeString = $_.InnerText
             try {
-                [datetime]::ParseExact($dateTimeValue, 'MM/dd/yyyy', $null) | Out-Null
-                $convertedDateTimeValue = Convert-DateTimeFormat -dateTimeValue $dateTimeValue
-                $field.InnerText = $convertedDateTimeValue
+                $parsedDateTime = [datetime]::ParseExact($dateTimeString, 'M/d/yyyy h:mm tt', $null)
+                $_.InnerText = $parsedDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ")
             } catch {
-                Write-Error "Invalid DateTime format: $dateTimeValue in field $($field.Name)"
+                Write-Error "Error parsing DateTime: $dateTimeString"
             }
-        } else {
-            Write-Error "Empty DateTime field found: $($field.Name)"
         }
     }
 
-    $xmlTemplate.Save($templatePath)
+    # Save the modified XML template to a new file
+    $modifiedTemplatePath = [System.IO.Path]::ChangeExtension($templatePath, "modified.xml")
+    $xmlContent.Save($modifiedTemplatePath)
+
+    return $modifiedTemplatePath
 }
 
 # Function to invoke the template
@@ -115,8 +108,6 @@ function Invoke-Template {
         [string]$templatePath
     )
     
-    Test-And-Convert-DateTimeFields -templatePath $templatePath
-    
     try {
         Connect-PnPOnline -Url $siteUrl -Credentials $cred
         Write-Host "Applying template to site: $siteUrl"
@@ -124,9 +115,6 @@ function Invoke-Template {
         Write-Host "Template applied to site: $siteUrl"
     } catch {
         Write-Error "Error applying template to site ${siteUrl}: $_"
-        if ($_.Exception -match "String '(.*)' was not recognized as a valid DateTime") {
-            Write-Host "Invalid DateTime format found: $($matches[1])"
-        }
     }
 }
 
@@ -141,16 +129,15 @@ function New-Sites {
     Write-Host "Starting site creation process with $siteCount sites..."
     for ($i = 1; $i -le $siteCount; $i++) {
         $siteNumber = "{0:D4}" -f $i
-        $siteUrl = "$($SHAREPOINT_SITE_URL)/sites/$($sitePrefix)$siteNumber"
+        $siteUrl = "$($SHAREPOINT_SITE_URL)/sites/$($sitePrefix)$($siteNumber)"
         $siteTitle = "$sitePrefix $siteNumber"
         $siteDescription = "Site $sitePrefix number $siteNumber"
         
         # Debug: Print site details
-        Write-Host "Creating site: $siteUrl with title: $siteTitle and description: $siteDescription"
-        Write-Host "SHAREPOINT_SITE_URL: $SHAREPOINT_SITE_URL"
-        Write-Host "sitePrefix: $sitePrefix"
-        Write-Host "siteNumber: $siteNumber"
+        Write-Host "DEBUG: Creating site with the following details:"
         Write-Host "siteUrl: $siteUrl"
+        Write-Host "siteTitle: $siteTitle"
+        Write-Host "siteDescription: $siteDescription"
 
         if ($siteUrl -and $siteUrl -ne "") {
             try {
@@ -158,10 +145,14 @@ function New-Sites {
                 Write-Host "Created site: $siteUrl"
                 
                 # Introduce a delay before applying the template
-                Write-Host "Waiting for 60 seconds before applying the template..."
-                Start-Sleep -Seconds 60
+                Write-Host "Waiting for 30 seconds before applying the template..."
+                Start-Sleep -Seconds 30
                 
-                Invoke-Template -siteUrl $siteUrl -templatePath $templatePath
+                # Convert DateTime format in the template
+                $modifiedTemplatePath = Convert-DateTimeFormatInTemplate -templatePath $templatePath
+                Write-Host "Using modified template path: $modifiedTemplatePath"
+                
+                Invoke-Template -siteUrl $siteUrl -templatePath $modifiedTemplatePath
             } catch {
                 Write-Error "Error creating site ${siteTitle}: $_"
             }
