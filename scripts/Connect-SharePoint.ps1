@@ -1,5 +1,4 @@
 # Connect-SharePoint.ps1
-
 Import-Module PnP.PowerShell
 
 $envVariables = Get-Content -Path "./.env" | Where-Object { $_ -match '=' } | ForEach-Object {
@@ -13,8 +12,12 @@ $envVariables | ForEach-Object {
     }
 }
 
-$securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -Force
+# Print out environment variables to ensure they are set correctly
+$envVariables | ForEach-Object {
+    Write-Host "$($_.Name) = $($_.Value)"
+}
 
+$securePassword = ConvertTo-SecureString $env:SHAREPOINT_PASSWORD -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($env:SHAREPOINT_USERNAME, $securePassword)
 
 Connect-PnPOnline -Url $env:SHAREPOINT_ADMIN_URL -Credentials $cred
