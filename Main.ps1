@@ -2,18 +2,16 @@
 
 Import-Module PnP.PowerShell
 
-# Environment variables
-$SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
-$SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
-$OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
+$SHAREPOINT_ADMIN_URL = "XXXXXXXXXXXXXXXX"
+$SHAREPOINT_SITE_URL = "XXXXXXXXXXXXXXXX"
+$OWNER_EMAIL = "XXXXXXXXXXXXXXXX"
 $TEMPLATE_PATH = ".\EditedTemplate.xml"
-$SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
-$SHAREPOINT_PASSWORD = '$i2odroY8K2s'
-$NEW_SITE_NAME = "NewProjectSite"
-$SITE_ALIAS = "NewProjectSite"
+$SHAREPOINT_USERNAME = "XXXXXXXXXXXXXXXX"
+$SHAREPOINT_PASSWORD = 'XXXXXXXXXXXXXXXX'
+$NEW_SITE_NAME = "XXXXXXXXXXXXXXXX"
+$SITE_ALIAS = "XXXXXXXXXXXXXXXX"
 $siteCount = 5 
 
-# Debugging
 Write-Host "DEBUG: Hardcoded variables:"
 Write-Host "SHAREPOINT_ADMIN_URL = $SHAREPOINT_ADMIN_URL"
 Write-Host "SHAREPOINT_SITE_URL = $SHAREPOINT_SITE_URL"
@@ -25,7 +23,6 @@ Write-Host "NEW_SITE_NAME = $NEW_SITE_NAME"
 Write-Host "SITE_ALIAS = $SITE_ALIAS"
 Write-Host "siteCount = $siteCount"
 
-# Ensure critical environment variables are set
 if (-not $SHAREPOINT_SITE_URL) {
     Write-Error "SHAREPOINT_SITE_URL is not set."
     exit 1
@@ -56,32 +53,25 @@ if (-not $OWNER_EMAIL) {
     exit 1
 }
 
-# Convert password to secure string
 $securePassword = ConvertTo-SecureString $SHAREPOINT_PASSWORD -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($SHAREPOINT_USERNAME, $securePassword)
 
-# Connect to SharePoint
 Write-Host "Connecting to SharePoint..."
 Connect-PnPOnline -Url $SHAREPOINT_ADMIN_URL -Credentials $cred
 Write-Host "Successfully connected to SharePoint Online."
 
-# Resolve the template path to an absolute path
 $resolvedTemplatePath = Resolve-Path $TEMPLATE_PATH
 Write-Host "Resolved template path: $resolvedTemplatePath"
 
-# Function to convert DateTime format within the XML template
 function Convert-DateTimeFormatInTemplate {
     param (
         [string]$templatePath
     )
 
-    # Load the XML template
     [xml]$xmlContent = Get-Content -Path $templatePath
 
-    # Define the DateTime format pattern
     $dateTimePattern = '(\d{1,2})/(\d{1,2})/(\d{4})\s(\d{1,2}):(\d{2})\s([APMapm]{2})'
 
-    # Iterate through each node and convert DateTime format
     $xmlContent.SelectNodes("//*[text()]") | ForEach-Object {
         if ($_.InnerText -match $dateTimePattern) {
             $dateTimeString = $_.InnerText
@@ -94,14 +84,12 @@ function Convert-DateTimeFormatInTemplate {
         }
     }
 
-    # Save the modified XML template to a new file
     $modifiedTemplatePath = [System.IO.Path]::ChangeExtension($templatePath, "modified.xml")
     $xmlContent.Save($modifiedTemplatePath)
 
     return $modifiedTemplatePath
 }
 
-# Function to invoke the template
 function Invoke-Template {
     param (
         [string]$siteUrl,
@@ -119,7 +107,6 @@ function Invoke-Template {
     }
 }
 
-# Function to create new sites
 function New-Sites {
     param (
         [int]$siteCount,
@@ -134,7 +121,6 @@ function New-Sites {
         $siteTitle = "$sitePrefix $siteNumber"
         $siteDescription = "Site $sitePrefix number $siteNumber"
         
-        # Debug: Print site details
         Write-Host "DEBUG: Creating site with the following details:"
         Write-Host "siteUrl: $siteUrl"
         Write-Host "siteTitle: $siteTitle"
@@ -146,11 +132,9 @@ function New-Sites {
                 New-PnPSite -Type CommunicationSite -Url $siteUrl -Owner $OWNER_EMAIL -Title $siteTitle -Description $siteDescription
                 Write-Host "Created site: $siteUrl"
                 
-                # Introduce a delay before applying the template
                 Write-Host "Waiting for 45 seconds before applying the template..."
                 Start-Sleep -Seconds 45
                 
-                # Convert DateTime format in the template
                 $modifiedTemplatePath = Convert-DateTimeFormatInTemplate -templatePath $templatePath
                 Write-Host "Using modified template path: $modifiedTemplatePath"
                 
@@ -164,7 +148,6 @@ function New-Sites {
     }
 }
 
-# Execute site creation
 New-Sites -siteCount $siteCount -sitePrefix $NEW_SITE_NAME -templatePath $resolvedTemplatePath
 
 Write-Host "Script executed successfully."

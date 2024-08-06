@@ -1,32 +1,27 @@
-# Import PnP.PowerShell module
+# ExportSiteTemplate.ps1
+
 Import-Module PnP.PowerShell
 
-# Environment variables
-$SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
-$SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
-$SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
-$SHAREPOINT_PASSWORD = '$i2odroY8K2s'
+$SHAREPOINT_ADMIN_URL = "XXXXXXXXXXXXXXXX"
+$SHAREPOINT_SITE_URL = "XXXXXXXXXXXXXXXX"
+$SHAREPOINT_USERNAME = "XXXXXXXXXXXXXXXX"
+$SHAREPOINT_PASSWORD = 'XXXXXXXXXXXXXXXX'
 
-# Site URL to download the template from
-$SITE_URL = "$SHAREPOINT_SITE_URL/sites/SiteFifteen0001"
-$PROJECT_ROOT_PATH = "C:\Users\cyber\Desktop\powershell-sharepoint-project"
+$SITE_URL = "$SHAREPOINT_SITE_URL/sites/XXXXXXXXXXXXXXXX"
+$PROJECT_ROOT_PATH = "XXXXXXXXXXXXXXXX"
 $OUTPUT_TEMPLATE_PATH = "$PROJECT_ROOT_PATH\EditedTemplate.xml"
 
-# Convert password to secure string
 $securePassword = ConvertTo-SecureString $SHAREPOINT_PASSWORD -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($SHAREPOINT_USERNAME, $securePassword)
 
-# Connect to SharePoint
 Write-Host "Connecting to SharePoint..."
 Connect-PnPOnline -Url $SHAREPOINT_ADMIN_URL -Credentials $cred
 Write-Host "Successfully connected to SharePoint Online."
 
-# Connect to the specific site
 Write-Host "Connecting to site: $SITE_URL"
 Connect-PnPOnline -Url $SITE_URL -Credentials $cred
 Write-Host "Successfully connected to site: $SITE_URL"
 
-# Export the site template with all content
 Write-Host "Exporting site template..."
 $exportParams = @{
     Out         = $OUTPUT_TEMPLATE_PATH
@@ -38,13 +33,11 @@ $exportParams = @{
 }
 Get-PnPSiteTemplate @exportParams
 
-# Check if the template file exists and its size
 if (Test-Path $OUTPUT_TEMPLATE_PATH) {
     $fileInfo = Get-Item $OUTPUT_TEMPLATE_PATH
     Write-Host "Template exported to: $OUTPUT_TEMPLATE_PATH"
     Write-Host "File size: $($fileInfo.Length) bytes"
 
-    # Basic verification of the file content
     $fileContent = Get-Content $OUTPUT_TEMPLATE_PATH
     if ($fileContent -like "*<pnp:ProvisioningTemplate*") {
         Write-Host "Template file appears to be valid."
