@@ -10,7 +10,7 @@ This project uses PowerShell scripting to automate the creation and application 
 
 ## PowerShell Scripting
 
-### Main.ps1
+### Creating New Sites
 
 ```powershell
 function New-Sites {
@@ -55,6 +55,8 @@ function New-Sites {
 }
 ```
 
+### Applying the Template
+
 ```powershell
 function Invoke-Template {
     param (
@@ -73,6 +75,7 @@ function Invoke-Template {
     }
 }
 ```
+### Converting DateTime
 
 ```powershell
 function Convert-DateTimeFormatInTemplate {
@@ -103,6 +106,9 @@ function Convert-DateTimeFormatInTemplate {
 }
 ```
 
+## Template Site
+https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
+
 ## Notes
 
 ### Application of Azure Services
@@ -113,5 +119,3 @@ function Convert-DateTimeFormatInTemplate {
 
 7) The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
 
-## Template Site
-https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
