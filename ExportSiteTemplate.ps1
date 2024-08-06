@@ -1,15 +1,14 @@
 # Import PnP.PowerShell module
 Import-Module PnP.PowerShell
 
-# Hardcoded environment variables
+# Environment variables
 $SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
 $SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
-$SHAREPOINT_PASSWORD = '$i2odroY8K2s'  # Ensure the value is correct
+$SHAREPOINT_PASSWORD = '$i2odroY8K2s'
 
 # Site URL to download the template from
 $SITE_URL = "$SHAREPOINT_SITE_URL/sites/SiteFifteen0001"
-# Path to save the .xml file (project root directory)
 $PROJECT_ROOT_PATH = "C:\Users\cyber\Desktop\powershell-sharepoint-project"
 $OUTPUT_TEMPLATE_PATH = "$PROJECT_ROOT_PATH\EditedTemplate.xml"
 

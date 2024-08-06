@@ -118,7 +118,5 @@ New-Sites -siteCount $siteCount -sitePrefix $env:NEW_SITE_NAME -templatePath $en
     SITE_ALIAS=your_site_alias
     ```
 
-## Structure
-- The script `Connect-SharePoint.ps1` handles connecting to SharePoint Online using stored credentials.
-- The script `Create-Sites.ps1` creates the sites and applies the template.
-- Adjust the `.env` file with your specific environment details.
+## Template Site
+https://cyberforge000.sharepoint.com/sites/SiteFifteen0001

@@ -2,18 +2,18 @@
 
 Import-Module PnP.PowerShell
 
-# Hardcoded environment variables
+# Environment variables
 $SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
 $SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
 $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
 $TEMPLATE_PATH = ".\EditedTemplate.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
 $SHAREPOINT_PASSWORD = '$i2odroY8K2s'
-$NEW_SITE_NAME = "CompletelyNewNameTwo"
-$SITE_ALIAS = "CompletelyNewNameTwo"
-$siteCount = 5  # Set the number of sites you want to create
+$NEW_SITE_NAME = "NewProjectSite"
+$SITE_ALIAS = "NewProjectSite"
+$siteCount = 5 
 
-# Debugging: Print out the hardcoded variables
+# Debugging
 Write-Host "DEBUG: Hardcoded variables:"
 Write-Host "SHAREPOINT_ADMIN_URL = $SHAREPOINT_ADMIN_URL"
 Write-Host "SHAREPOINT_SITE_URL = $SHAREPOINT_SITE_URL"
