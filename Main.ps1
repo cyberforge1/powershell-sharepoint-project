@@ -1,16 +1,18 @@
 # Main.ps1
 
+
 Import-Module PnP.PowerShell
 
 # Hardcoded environment variables
 $SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
 $SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
 $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
+# $TEMPLATE_PATH = ".\EditedTemplate.xml"
 $TEMPLATE_PATH = ".\contosoworks\source\template.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
 $SHAREPOINT_PASSWORD = '$i2odroY8K2s'  # Enclosed in single quotes to ensure the value is correct
-$NEW_SITE_NAME = "SiteFifteen"
-$SITE_ALIAS = "SiteFifteen"
+$NEW_SITE_NAME = "NewSiteThree"
+$SITE_ALIAS = "NewSiteThree"
 $siteCount = 5  # Set the number of sites you want to create
 
 # Debugging: Print out the hardcoded variables
@@ -109,6 +111,7 @@ function Invoke-Template {
     )
     
     try {
+        Write-Host "Connecting to site: $siteUrl"
         Connect-PnPOnline -Url $siteUrl -Credentials $cred
         Write-Host "Applying template to site: $siteUrl"
         Invoke-PnPSiteTemplate -Path $templatePath
@@ -129,7 +132,7 @@ function New-Sites {
     Write-Host "Starting site creation process with $siteCount sites..."
     for ($i = 1; $i -le $siteCount; $i++) {
         $siteNumber = "{0:D4}" -f $i
-        $siteUrl = "$($SHAREPOINT_SITE_URL)/sites/$($sitePrefix)$($siteNumber)"
+        $siteUrl = "$SHAREPOINT_SITE_URL/sites/$sitePrefix$siteNumber"
         $siteTitle = "$sitePrefix $siteNumber"
         $siteDescription = "Site $sitePrefix number $siteNumber"
         
@@ -141,6 +144,7 @@ function New-Sites {
 
         if ($siteUrl -and $siteUrl -ne "") {
             try {
+                Write-Host "Creating site: $siteUrl"
                 New-PnPSite -Type CommunicationSite -Url $siteUrl -Owner $OWNER_EMAIL -Title $siteTitle -Description $siteDescription
                 Write-Host "Created site: $siteUrl"
                 
