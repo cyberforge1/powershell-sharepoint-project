@@ -1,18 +1,16 @@
 # Main.ps1
 
-
 Import-Module PnP.PowerShell
 
 # Hardcoded environment variables
 $SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
 $SHAREPOINT_SITE_URL = "https://cyberforge000.sharepoint.com"
 $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
-# $TEMPLATE_PATH = ".\EditedTemplate.xml"
-$TEMPLATE_PATH = ".\contosoworks\source\template.xml"
+$TEMPLATE_PATH = ".\EditedTemplate.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
-$SHAREPOINT_PASSWORD = '$i2odroY8K2s'  # Enclosed in single quotes to ensure the value is correct
-$NEW_SITE_NAME = "NewSiteThree"
-$SITE_ALIAS = "NewSiteThree"
+$SHAREPOINT_PASSWORD = '$i2odroY8K2s'
+$NEW_SITE_NAME = "CompletelyNewNameTwo"
+$SITE_ALIAS = "CompletelyNewNameTwo"
 $siteCount = 5  # Set the number of sites you want to create
 
 # Debugging: Print out the hardcoded variables
@@ -149,8 +147,8 @@ function New-Sites {
                 Write-Host "Created site: $siteUrl"
                 
                 # Introduce a delay before applying the template
-                Write-Host "Waiting for 30 seconds before applying the template..."
-                Start-Sleep -Seconds 30
+                Write-Host "Waiting for 45 seconds before applying the template..."
+                Start-Sleep -Seconds 45
                 
                 # Convert DateTime format in the template
                 $modifiedTemplatePath = Convert-DateTimeFormatInTemplate -templatePath $templatePath

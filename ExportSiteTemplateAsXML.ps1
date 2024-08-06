@@ -27,11 +27,33 @@ Write-Host "Connecting to site: $SITE_URL"
 Connect-PnPOnline -Url $SITE_URL -Credentials $cred
 Write-Host "Successfully connected to site: $SITE_URL"
 
-# Export the site template
+# Export the site template with all content
 Write-Host "Exporting site template..."
-Get-PnPSiteTemplate -Out $OUTPUT_TEMPLATE_PATH
-Write-Host "Template exported to: $OUTPUT_TEMPLATE_PATH"
+$exportParams = @{
+    Out         = $OUTPUT_TEMPLATE_PATH
+    PersistBrandingFiles = $true
+    IncludeAllTermGroups = $true
+    IncludeSiteCollectionTermGroup = $true
+    IncludeSearchConfiguration = $true
+    Handlers    = "All"
+}
+Get-PnPSiteTemplate @exportParams
+
+# Check if the template file exists and its size
+if (Test-Path $OUTPUT_TEMPLATE_PATH) {
+    $fileInfo = Get-Item $OUTPUT_TEMPLATE_PATH
+    Write-Host "Template exported to: $OUTPUT_TEMPLATE_PATH"
+    Write-Host "File size: $($fileInfo.Length) bytes"
+
+    # Basic verification of the file content
+    $fileContent = Get-Content $OUTPUT_TEMPLATE_PATH
+    if ($fileContent -like "*<pnp:ProvisioningTemplate*") {
+        Write-Host "Template file appears to be valid."
+    } else {
+        Write-Host "Warning: Template file may be incomplete or corrupted."
+    }
+} else {
+    Write-Host "Error: Template file was not created."
+}
 
 Write-Host "Script executed successfully."
-
-
