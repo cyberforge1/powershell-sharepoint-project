@@ -1,6 +1,7 @@
 # Main.ps1
 
 Import-Module PnP.PowerShell
+Import-Module ImportExcel
 
 # Environment variables
 $SHAREPOINT_ADMIN_URL = "https://cyberforge000-admin.sharepoint.com"
@@ -9,9 +10,10 @@ $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
 $TEMPLATE_PATH = ".\EditedTemplate.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
 $SHAREPOINT_PASSWORD = '$i2odroY8K2s'
-$NEW_SITE_NAME = "NewProjectSite"
-$SITE_ALIAS = "NewProjectSite"
-$siteCount = 5 
+$NEW_SITE_NAME = "EntirelyNewNameForProjectSite"
+$SITE_ALIAS = "EntirelyNewNameForProjectSite"
+$siteCount = 5
+$EVENTS_FILE_PATH = ".\CalendarEvents.xlsx" # Path to your .xlsx file
 
 # Debugging
 Write-Host "DEBUG: Hardcoded variables:"
@@ -24,6 +26,7 @@ Write-Host "SHAREPOINT_PASSWORD = $SHAREPOINT_PASSWORD"
 Write-Host "NEW_SITE_NAME = $NEW_SITE_NAME"
 Write-Host "SITE_ALIAS = $SITE_ALIAS"
 Write-Host "siteCount = $siteCount"
+Write-Host "EVENTS_FILE_PATH = $EVENTS_FILE_PATH"
 
 # Ensure critical environment variables are set
 if (-not $SHAREPOINT_SITE_URL) {
@@ -119,12 +122,45 @@ function Invoke-Template {
     }
 }
 
+# Function to add calendar events
+function Add-CalendarEvents {
+    param (
+        [string]$siteUrl,
+        [string]$eventsFilePath
+    )
+    
+    Write-Host "Adding calendar events to site: $siteUrl"
+    
+    $events = Import-Excel -Path $eventsFilePath
+    
+    foreach ($event in $events) {
+        $eventTitle = $event.Title
+        $startTime = [datetime]$event.'Start Time'
+        $endTime = [datetime]$event.'End Time'
+        $recurrence = [bool]$event.Recurrence
+        
+        try {
+            Add-PnPListItem -List "Calendar" -Values @{
+                "Title" = $eventTitle
+                "EventDate" = $startTime
+                "EndDate" = $endTime
+                "fAllDayEvent" = $true
+                "fRecurrence" = $recurrence
+            }
+            Write-Host "Added event: $eventTitle"
+        } catch {
+            Write-Error "Error adding event ${eventTitle}: $_"
+        }
+    }
+}
+
 # Function to create new sites
 function New-Sites {
     param (
         [int]$siteCount,
         [string]$sitePrefix,
-        [string]$templatePath
+        [string]$templatePath,
+        [string]$eventsFilePath
     )
     
     Write-Host "Starting site creation process with $siteCount sites..."
@@ -155,6 +191,9 @@ function New-Sites {
                 Write-Host "Using modified template path: $modifiedTemplatePath"
                 
                 Invoke-Template -siteUrl $siteUrl -templatePath $modifiedTemplatePath
+                
+                # Add calendar events
+                Add-CalendarEvents -siteUrl $siteUrl -eventsFilePath $eventsFilePath
             } catch {
                 Write-Error "Error creating site ${siteTitle}: $_"
             }
@@ -165,6 +204,6 @@ function New-Sites {
 }
 
 # Execute site creation
-New-Sites -siteCount $siteCount -sitePrefix $NEW_SITE_NAME -templatePath $resolvedTemplatePath
+New-Sites -siteCount $siteCount -sitePrefix $NEW_SITE_NAME -templatePath $resolvedTemplatePath -eventsFilePath $EVENTS_FILE_PATH
 
 Write-Host "Script executed successfully."
