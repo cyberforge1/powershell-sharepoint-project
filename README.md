@@ -105,6 +105,40 @@ function Convert-DateTimeFormatInTemplate {
     return $modifiedTemplatePath
 }
 ```
+### Dynamic Event Addition
+
+```powershell
+function Add-CalendarEvents {
+    param (
+        [string]$siteUrl,
+        [string]$eventsFilePath
+    )
+    
+    Write-Host "Adding calendar events to site: $siteUrl"
+    
+    $events = Import-Csv -Path $eventsFilePath
+    
+    foreach ($event in $events) {
+        $eventTitle = $event.Title
+        $startTime = [datetime]::ParseExact($event.'Start Time', 'M/d/yyyy H:mm', $null)
+        $endTime = [datetime]::ParseExact($event.'End Time', 'M/d/yyyy H:mm', $null)
+        $recurrence = [bool]$event.Recurrence
+        
+        try {
+            Add-PnPListItem -List "Calendar" -Values @{
+                "Title" = $eventTitle
+                "EventDate" = $startTime
+                "EndDate" = $endTime
+                "fAllDayEvent" = $true
+                "fRecurrence" = $recurrence
+            }
+            Write-Host "Added event: $eventTitle"
+        } catch {
+            Write-Error "Error adding event ${eventTitle}: $_"
+        }
+    }
+}
+```
 
 ## Template Site
 https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
@@ -118,4 +152,11 @@ https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
 ### General Application
 
 7) The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
+
+
+
+
+
+
+
 

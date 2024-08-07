@@ -12,6 +12,7 @@ $NEW_SITE_NAME = "XXXXXXXXXXXXXXXX"
 $SITE_ALIAS = "XXXXXXXXXXXXXXXX"
 $siteCount = 5 
 
+
 Write-Host "DEBUG: Hardcoded variables:"
 Write-Host "SHAREPOINT_ADMIN_URL = $SHAREPOINT_ADMIN_URL"
 Write-Host "SHAREPOINT_SITE_URL = $SHAREPOINT_SITE_URL"
@@ -22,6 +23,7 @@ Write-Host "SHAREPOINT_PASSWORD = $SHAREPOINT_PASSWORD"
 Write-Host "NEW_SITE_NAME = $NEW_SITE_NAME"
 Write-Host "SITE_ALIAS = $SITE_ALIAS"
 Write-Host "siteCount = $siteCount"
+Write-Host "EVENTS_FILE_PATH = $EVENTS_FILE_PATH"
 
 if (-not $SHAREPOINT_SITE_URL) {
     Write-Error "SHAREPOINT_SITE_URL is not set."
@@ -107,11 +109,43 @@ function Invoke-Template {
     }
 }
 
+function Add-CalendarEvents {
+    param (
+        [string]$siteUrl,
+        [string]$eventsFilePath
+    )
+    
+    Write-Host "Adding calendar events to site: $siteUrl"
+    
+    $events = Import-Csv -Path $eventsFilePath
+    
+    foreach ($event in $events) {
+        $eventTitle = $event.Title
+        $startTime = [datetime]::ParseExact($event.'Start Time', 'M/d/yyyy H:mm', $null)
+        $endTime = [datetime]::ParseExact($event.'End Time', 'M/d/yyyy H:mm', $null)
+        $recurrence = [bool]$event.Recurrence
+        
+        try {
+            Add-PnPListItem -List "Calendar" -Values @{
+                "Title" = $eventTitle
+                "EventDate" = $startTime
+                "EndDate" = $endTime
+                "fAllDayEvent" = $true
+                "fRecurrence" = $recurrence
+            }
+            Write-Host "Added event: $eventTitle"
+        } catch {
+            Write-Error "Error adding event ${eventTitle}: $_"
+        }
+    }
+}
+
 function New-Sites {
     param (
         [int]$siteCount,
         [string]$sitePrefix,
-        [string]$templatePath
+        [string]$templatePath,
+        [string]$eventsFilePath
     )
     
     Write-Host "Starting site creation process with $siteCount sites..."
@@ -139,6 +173,8 @@ function New-Sites {
                 Write-Host "Using modified template path: $modifiedTemplatePath"
                 
                 Invoke-Template -siteUrl $siteUrl -templatePath $modifiedTemplatePath
+                
+                Add-CalendarEvents -siteUrl $siteUrl -eventsFilePath $eventsFilePath
             } catch {
                 Write-Error "Error creating site ${siteTitle}: $_"
             }
@@ -148,6 +184,6 @@ function New-Sites {
     }
 }
 
-New-Sites -siteCount $siteCount -sitePrefix $NEW_SITE_NAME -templatePath $resolvedTemplatePath
+New-Sites -siteCount $siteCount -sitePrefix $NEW_SITE_NAME -templatePath $resolvedTemplatePath -eventsFilePath $EVENTS_FILE_PATH
 
 Write-Host "Script executed successfully."
