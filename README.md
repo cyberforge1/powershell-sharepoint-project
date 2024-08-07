@@ -106,6 +106,8 @@ function Convert-DateTimeFormatInTemplate {
 }
 ```
 
+### Dynamic Event Addition
+
 ```powershell
 function Add-CalendarEvents {
     param (
