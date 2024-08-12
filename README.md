@@ -1,6 +1,6 @@
 # SharePoint Site Provisioning with PowerShell
 
-## Description
+## Project Overview
 This project uses PowerShell scripting to automate site provisioning and application of customised templates to SharePoint sites.
 
 ## Screenshot
@@ -10,18 +10,6 @@ This project uses PowerShell scripting to automate site provisioning and applica
 - PowerShell 7.4.4
 - Microsoft SharePoint
 - PnP.PowerShell module
-
-
-## Important Links
-
-### Integrated Template Site
-https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
-
-### Base Template Repository Site
-
-- The base template for this site was sourced from the repository below:
-
-https://github.com/SharePoint/sp-dev-provisioning-templates
 
 ## PowerShell Scripting
 
@@ -155,6 +143,17 @@ function Add-CalendarEvents {
     }
 }
 ```
+
+## Important Links
+
+### Integrated Template Site
+https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
+
+### Base Template Repository Site
+
+- The base template for this site was sourced from the repository below:
+
+https://github.com/SharePoint/sp-dev-provisioning-templates
 
 ### Application of Azure Services
 
