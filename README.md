@@ -155,6 +155,8 @@ https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
 
 https://github.com/SharePoint/sp-dev-provisioning-templates
 
+## Assignment Questions
+
 ### Application of Azure Services
 
 6) Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Main.ps1` script and the functions contained within can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.

@@ -146,7 +146,7 @@ function New-Sites {
         [int]$siteCount,
         [string]$sitePrefix,
         [string]$templatePath,
-        [string]$eventsFilePath
+        [string]$eventsFilePath,
         [string]$templatePath,
         [string]$eventsFilePath
     )
