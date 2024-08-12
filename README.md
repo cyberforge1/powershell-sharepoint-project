@@ -1,12 +1,27 @@
-# SharePoint Site Creation with PowerShell
+# SharePoint Site Provisioning with PowerShell
 
 ## Description
-This project uses PowerShell scripting to automate the creation and application of templates to multiple SharePoint sites.
+This project uses PowerShell scripting to automate site provisioning and application of customised templates to SharePoint sites.
+
+## Screenshot
+![Project Screenshot](images/project-screenshot.png)
 
 ## Tech Stack
 - PowerShell 7.4.4
 - Microsoft SharePoint
 - PnP.PowerShell module
+
+
+## Important Links
+
+### Integrated Template Site
+https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
+
+### Base Template Repository Site
+
+- The base template for this site was sourced from the repository below:
+
+https://github.com/SharePoint/sp-dev-provisioning-templates
 
 ## PowerShell Scripting
 
@@ -105,6 +120,7 @@ function Convert-DateTimeFormatInTemplate {
     return $modifiedTemplatePath
 }
 ```
+
 ### Dynamic Event Addition
 
 ```powershell
@@ -140,23 +156,32 @@ function Add-CalendarEvents {
 }
 ```
 
-## Template Site
-https://cyberforge000.sharepoint.com/sites/SiteFifteen0001
-
-## Notes
-
 ### Application of Azure Services
 
-6) Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Connect-SharePoint.ps1` and `Create-Sites.ps1` scripts and Functions can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.
+6) Azure Automation and Functions can be used to run PowerShell scripts for creating SharePoint sites in the cloud. For integration with this project Automation can manage the execution of the `Main.ps1` script and the functions contained within can handle HTTP triggers to run the automatic creation of sites. Services like Azure Key Vault can also be used to bridge services like these to allow shared access and also secure storage for sensitive project information.
 
 ### General Application
 
 7) The three services - Azure Automation, Functions and Key Vault - work cohesively together to provide automation processes with a trigger, that can be used for many applications. A focus on outsourcing demanding compute tasks to virtual machines in the cloud is incredibly powerful and useful, particularly for tasks that benefit from scaling of resources. Also the serverless nature of Azure Functions allows for cost efficient solutions with having to manage infrastrucutre directly. 
 
 
+## Learning Highlights
+- Gaining experience scripting with PowerShell
+- Automating SharePoint site creation
+- Developing skills with a Microsoft Stack
 
 
+## Challenges
+- Dynamic population of data into the customised template
+- Scripting to export the automatically created site
 
 
-
-
+## Contact Me
+- Visit my [LinkedIn](https://www.linkedin.com/in/obj809/) for more details.
+- Check out my [GitHub](https://github.com/cyberforge1) for more projects.
+- Or send me an email at obj809@gmail.com
+<br />
+Thanks for your interest in this project. Feel free to reach out with any thoughts or questions.
+<br />
+<br />
+Oliver Jenkins © 2024

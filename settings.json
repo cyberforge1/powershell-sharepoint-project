@@ -1,0 +1,184 @@
+{
+  "templateId": "EBB9432C-3BBD-4F64-8F74-E75A8B4F96DE", 	
+  "categories": [
+        "DEPARTMENT"
+    ],
+    "platforms": [
+        "SPPNP",
+        "LOOKBOOK"
+      ],
+        "packageFile": "contosoworks.pnp",
+    "abstract": "Besides hub news, events, contacts and other resources, this example of a Human Resources hub site features a custom PowerApp for time off requests from employees.",
+    "sortOrder": 300,
+    "promoted": "false",
+    "sortOrderPromoted": 0,
+    "preview": "false",
+    "forceNewSite": "false",
+    "matchingSiteBaseTemplateId": "SITEPAGEPUBLISHING#0",
+    "visible": "true",
+    "metadata": {
+        "properties": [
+            {
+                "name": "SiteTitle",
+                "caption": "Hub Site Title",
+                "description": "Title for your hub site"
+            },
+            {
+                "name": "SiteUrl",
+                "caption": "Site URL",
+                "description": "Relative URL to be used for the site",
+                "editor": "SiteUrl"
+            },
+            {
+                "name": "BenefitsSiteTitle",
+                "caption": "Benefits Site Title",
+                "description": "Title for the benefits site"
+            },
+            {
+                "name": "BenefitsSiteUrl",
+                "caption": "Site URL for the Benefits site",
+                "description": "Relative URL to be used for the site",
+                "editor": "SiteUrl"
+            }
+        ],
+        "displayInfo": {
+            "pageTemplateId": "system/pageTemplates/template-1",
+            "siteDescriptor": "Employee-focused news, resources",
+            "descriptionParagraphs": [
+                "Besides hub news, events, contacts and other resources, this example of a Human Resources hub site features a custom PowerApp for time off requests from employees."
+            ],
+            "previewImages": [
+                {
+                    "type": "fullpage",
+                    "altText": "Human resources hub layout",
+                    "url": "./full-layout-contosoworks.jpg"
+                },
+                {
+                    "type": "cardpreview",
+                    "altText": "Human resources hub preview",
+                    "url": "./card-contosoworks.jpg"
+                }
+            ],
+            "detailItemCategories": [
+                {
+                    "name": "Webparts",
+                    "items": [
+                        {
+                            "name": "Hub News",
+                            "description": "Carousel, Side-by-side, List",
+                            "url": "https://support.office.com/en-us/article/use-the-news-web-part-on-a-sharepoint-page-c2dcee50-f5d7-434b-8cb9-a7feefd9f165"
+                        },
+                        {
+                            "name": "File viewer",
+                            "description": "Custom slide start",
+                            "url": "https://support.office.com/en-us/article/use-the-file-viewer-web-part-e53a9602-e7b3-4fff-9126-de2f18d1900c"
+                        },
+                        {
+                            "name": "Events",
+                            "description": "Compact",
+                            "url": "https://support.office.com/en-us/article/use-the-events-web-part-5fe4da93-5fa9-4695-b1ee-b0ae4c981909"
+                        },
+                        {
+                            "name": "Hero",
+                            "description": "Full width, one tile",
+                            "url": "https://support.office.com/en-us/article/use-the-hero-web-part-d57f449b-19a0-4b0d-8ce3-be5866430630"
+                        },
+                        {
+                            "name": "Quick Links",
+                            "description": "Button, icon on left, outline, center alignment, one line title text",
+                            "url": "https://support.office.com/en-us/article/use-the-quick-links-web-part-e1df7561-209d-4362-96d4-469f85ab2a82"
+                        },
+                        {
+                            "name": "Quick Links",
+                            "description": "List, descriptions shown, icons on left",
+                            "url": "https://support.office.com/en-us/article/use-the-quick-links-web-part-e1df7561-209d-4362-96d4-469f85ab2a82"
+                        },
+                        {
+                            "name": "PowerApps",
+                            "description": "Custom",
+                            "url": "https://support.office.com/en-us/article/use-the-powerapps-web-part-6285f05e-e441-408a-99d7-aa688195cd1c"
+                        },
+                        {
+                            "name": "People",
+                            "description": "Compact",
+                            "url": "https://support.office.com/en-us/article/show-people-profiles-on-your-page-with-the-people-web-part-7e52c5f6-2d72-48fa-a9d3-d2750765fa05"
+                        }
+                    ]
+                },
+                {
+                    "name": "Features",
+                    "items": [
+                        {
+                            "name": "Custom company theme",
+                            "url": "https://support.office.com/en-us/article/Change-the-look-of-your-SharePoint-site-06bbadc3-6b04-4a60-9d14-894f6a170818"
+                        },
+                        {
+                            "name": "Vertical section",
+                            "url": "https://support.office.com/en-us/article/add-sections-and-columns-on-a-page-fc491eb4-f733-4825-8fe2-e1ed80bd0899"
+                        },
+                        {
+                            "name": "Section background",
+                            "url": "https://support.office.com/en-us/article/Change-the-look-of-your-SharePoint-site-06bbadc3-6b04-4a60-9d14-894f6a170818"
+                        },
+                        {
+                            "name": "Mega Menu",
+                            "url": "https://support.office.com/en-us/article/customize-the-navigation-on-your-sharepoint-site-3cd61ae7-a9ed-4e1e-bf6d-4655f0bf25ca"
+                        },
+                        {
+                            "name": "Compact header",
+                            "url": "https://support.office.com/en-us/article/Change-the-look-of-your-SharePoint-site-06bbadc3-6b04-4a60-9d14-894f6a170818"
+                        },
+                        {
+                            "name": "Header background",
+                            "url": "https://support.office.com/en-us/article/Change-the-look-of-your-SharePoint-site-06bbadc3-6b04-4a60-9d14-894f6a170818"
+                        },
+                        {
+                            "name": "Custom site logo",
+                            "url": "https://support.office.com/en-us/article/Change-the-look-of-your-SharePoint-site-06bbadc3-6b04-4a60-9d14-894f6a170818",
+                            "badgeText": ""
+                        },
+                        {
+                            "name": "Footer",
+                            "url": "https://support.office.com/en-us/article/customize-your-sharepoint-site-320b43e5-b047-4fda-8381-f61e8ac7f59b"
+                        }
+                    ]
+                },
+                {
+                    "name": "Site Content",
+                    "items": [
+                        {
+                            "name": "Hub site with custom content"
+                        },
+                        {
+                            "name": "Secondary site collection associated to the hub site"
+                        },
+                        {
+                            "name": "Multiple custom modern pages and news articles"
+                        },
+                        {
+                            "name": "Example Office documents"
+                        }
+                    ]
+                },
+                {
+                    "name": "Resources",
+                    "items": []
+                }
+            ],
+            "systemRequirements": [
+                {
+                    "name": "SharePoint version",
+                    "value": "SharePoint Online"
+                },
+                {
+                    "name": "Permission required",
+                    "value": "Tenant Admin"
+                },
+                {
+                    "name": "Site language",
+                    "value": "English"
+                }
+            ]
+        }
+    }
+}

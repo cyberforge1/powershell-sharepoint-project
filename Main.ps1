@@ -24,6 +24,7 @@ Write-Host "NEW_SITE_NAME = $NEW_SITE_NAME"
 Write-Host "SITE_ALIAS = $SITE_ALIAS"
 Write-Host "siteCount = $siteCount"
 Write-Host "EVENTS_FILE_PATH = $EVENTS_FILE_PATH"
+Write-Host "EVENTS_FILE_PATH = $EVENTS_FILE_PATH"
 
 if (-not $SHAREPOINT_SITE_URL) {
     Write-Error "SHAREPOINT_SITE_URL is not set."
@@ -144,6 +145,8 @@ function New-Sites {
     param (
         [int]$siteCount,
         [string]$sitePrefix,
+        [string]$templatePath,
+        [string]$eventsFilePath
         [string]$templatePath,
         [string]$eventsFilePath
     )
