@@ -10,10 +10,10 @@ $OWNER_EMAIL = "oliver@cyberforge000.onmicrosoft.com"
 $TEMPLATE_PATH = ".\EditedTemplate.xml"
 $SHAREPOINT_USERNAME = "oliver@cyberforge000.onmicrosoft.com"
 $SHAREPOINT_PASSWORD = '$i2odroY8K2s'
-$NEW_SITE_NAME = "EntirelyNewNameForProjectSite"
-$SITE_ALIAS = "EntirelyNewNameForProjectSite"
+$NEW_SITE_NAME = "EntirelyNewNameForProjectSiteFour"
+$SITE_ALIAS = "EntirelyNewNameForProjectSiteFour"
 $siteCount = 5
-$EVENTS_FILE_PATH = ".\CalendarEvents.xlsx" # Path to your .xlsx file
+$EVENTS_FILE_PATH = ".\CalendarEvents.xlsx"
 
 # Debugging
 Write-Host "DEBUG: Hardcoded variables:"
